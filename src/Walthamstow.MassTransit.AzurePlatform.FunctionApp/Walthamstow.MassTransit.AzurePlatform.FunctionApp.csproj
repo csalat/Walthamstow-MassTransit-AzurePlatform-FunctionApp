@@ -37,4 +37,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AzureExtensions.Swashbuckle" Version="3.2.2" />
+    </ItemGroup>
 </Project>

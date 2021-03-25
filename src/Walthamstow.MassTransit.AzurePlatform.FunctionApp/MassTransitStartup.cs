@@ -72,7 +72,7 @@ namespace Walthamstow.MassTransit.AzurePlatform.FunctionApp
         {
             var platformOptions = provider.GetRequiredService<IOptions<PlatformOptions>>().Value;
             var transport = platformOptions.Transport.ToLower(CultureInfo.InvariantCulture);
-            return transport != PlatformOptions.AzureServiceBus &&
+            return transport != PlatformOptions.AzureServiceBus ||
                    transport != PlatformOptions.ASB;
         }
     }
