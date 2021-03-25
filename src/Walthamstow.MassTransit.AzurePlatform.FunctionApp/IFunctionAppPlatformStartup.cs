@@ -3,7 +3,7 @@ using MassTransit.ExtensionsDependencyInjectionIntegration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Walthamstow.MassTransit.AzurePlatform.FunctionApp.Interfaces
+namespace Walthamstow.MassTransit.AzurePlatform.FunctionApp
 {
     public interface IFunctionAppPlatformStartup
     {

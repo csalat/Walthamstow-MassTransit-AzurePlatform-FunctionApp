@@ -1,9 +1,13 @@
 ﻿using System;
-using MassTransit.Metadata;
+using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
-using Serilog;
-using Walthamstow.MassTransit.AzurePlatform.FunctionApp.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Serilog.Events;
+using Serilog.Extensions.Hosting;
+using Serilog.Extensions.Logging;
+using Walthamstow.MassTransit.AzurePlatform.Configs;
+using ILogger = Serilog.ILogger;
 
 namespace Walthamstow.MassTransit.AzurePlatform.FunctionApp
 {
@@ -11,18 +15,13 @@ namespace Walthamstow.MassTransit.AzurePlatform.FunctionApp
     {
         public static IFunctionsHostBuilder AddMassTransitStartup(
             this IFunctionsHostBuilder builder,
-            params Type[] startupTypes)
+             Type[] startupTypes,params string[] jsonFileNames)
         {
-
-            foreach (var startupType in startupTypes)
-            {
-                Log.Information("Adding Startup: {StartupType}", TypeMetadataCache.GetShortName(startupType));
-                builder.Services.AddSingleton(typeof (IFunctionAppPlatformStartup), startupType);
-            }
-
-            MassTransitStartup.ConfigureServices(builder);
-            return builder;
+            return builder.ConfigureDefaults(jsonFileNames)
+                .AddStartups(startupTypes)
+                .ConfigureServices();
         }
-        
+
+
     }
 }

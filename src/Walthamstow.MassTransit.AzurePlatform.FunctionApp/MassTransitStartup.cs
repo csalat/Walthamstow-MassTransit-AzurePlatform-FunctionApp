@@ -6,23 +6,23 @@ using MassTransit;
 using MassTransit.Definition;
 using MassTransit.ExtensionsDependencyInjectionIntegration;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Walthamstow.MassTransit.AzurePlatform.Configs;
-using Walthamstow.MassTransit.AzurePlatform.FunctionApp.Interfaces;
 
 namespace Walthamstow.MassTransit.AzurePlatform.FunctionApp
 {
-    public class MassTransitStartup
+    internal static class MassTransitStartup
     {
-        public static void ConfigureServices(IFunctionsHostBuilder builder)
+        internal static IFunctionsHostBuilder ConfigureServices(this IFunctionsHostBuilder builder)
         {
+            var configuration = builder.Services.BuildServiceProvider().GetService<IConfiguration>();
             Log.Information("Configuring MassTransit Services for Function Apps");
             var services = builder.Services;
 
-            var configuration = JsonConfigurationReader.Read();
             services.Configure<PlatformOptions>(configuration.GetSection("Platform"));
             services.Configure<ServiceBusOptions>(configuration.GetSection("ASB"));
 
@@ -41,6 +41,8 @@ namespace Walthamstow.MassTransit.AzurePlatform.FunctionApp
 
                 SetupAzureServiceBus(provider, cfg, platformStartups);
             });
+
+            return builder;
         }
 
         private static void SetupAzureServiceBus(IServiceProvider provider, IServiceCollectionBusConfigurator cfg,
